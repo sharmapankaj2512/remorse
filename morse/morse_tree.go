@@ -1,9 +1,14 @@
 package morse
 
 import (
-	"errors"
-	"strings"	
+	"errors"	
+	"strings"
 )
+
+type MorseTree struct {
+	Root *MorseTreeNode
+	nodes map[string]MorseTreeNode
+}
 
 type MorseTreeNode struct {
 	Left *MorseTreeNode
@@ -13,7 +18,7 @@ type MorseTreeNode struct {
 	Letter string
 }
 
-func make(codes MorseCodes) (*MorseTreeNode, error) {
+func make(codes MorseCodes) (*MorseTree, error) {
 	if len(codes.Preorder) == 0 {
 		return nil, errors.New("Preorder is mandatory")
 	}
@@ -40,8 +45,9 @@ func makeKey(mapping []string) string {
 	return strings.Join(mapping[:], "# ")
 }
 
-func makeTree(positions map[string]int, preorder [][]string) *MorseTreeNode {
-	var preorderIdx = 0
+func makeTree(positions map[string]int, preorder [][]string) *MorseTree {
+	nodes := map[string]MorseTreeNode{}
+	var preorderIdx = 0	
 	var helper func(parent *MorseTreeNode, start int, end int) *MorseTreeNode
 	helper = func(parent *MorseTreeNode, start int, end int) *MorseTreeNode {
 		if start > end {
@@ -50,6 +56,7 @@ func makeTree(positions map[string]int, preorder [][]string) *MorseTreeNode {
 		code, letter := preorder[preorderIdx][0], preorder[preorderIdx][1]
 		inorderIdx := positions[makeKey(preorder[preorderIdx])]
 		node := MorseTreeNode{Code: code, Letter: letter, Parent: parent}
+		nodes[letter] = node
 		preorderIdx += 1
 		if start != end {			
 			node.Left = helper(&node, start, inorderIdx - 1)
@@ -57,5 +64,25 @@ func makeTree(positions map[string]int, preorder [][]string) *MorseTreeNode {
 		}	
 		return &node
 	}
-	return helper(nil, 0, len(preorder) - 1)		
+	return &MorseTree{helper(nil, 0, len(preorder) - 1), nodes}
+}
+
+func (tree *MorseTree) decode(code string) string {	
+	var helper func (node *MorseTreeNode, codeIdx int) string
+	helper = func (node *MorseTreeNode, codeIdx int) string {
+		if codeIdx == len(code) - 1 {
+			return node.Letter
+		}
+		if string(code[codeIdx]) != node.Code {
+			return ""
+		}		
+		if node.Left != nil && string(code[codeIdx + 1]) == node.Left.Code {
+			return helper(node.Left, codeIdx + 1)
+		} 
+		if node.Right != nil && string(code[codeIdx + 1]) == node.Right.Code { 
+			return helper(node.Right, codeIdx + 1)
+		}
+		return ""
+	}		
+	return helper(tree.Root, 0)
 }
