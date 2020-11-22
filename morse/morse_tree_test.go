@@ -65,7 +65,7 @@ func TestMakeShouldReturnRootWithLeftAndRightSubtrees(t *testing.T) {
 	assert.Equal(t, "E", left.Right.Letter)	
 }
 
-func TestDecodeShouldConvertMorseCodeInToLetters(t *testing.T) {
+func TestDecodeShouldConvertMorseCodeInToLetter(t *testing.T) {
 	preorder := [][]string{{".", "A"}, {".", "B"}, {".", "D"}, {"-", "E"}, {"-", "C"}}
 	inorder := [][]string{{".", "D"}, {".", "B"}, {".", "E"}, {".", "A"}, {".", "C"}}
 	tree, _ := make(MorseCodes{preorder, inorder})
@@ -76,4 +76,15 @@ func TestDecodeShouldConvertMorseCodeInToLetters(t *testing.T) {
 	assert.Equal(t, "D", tree.decode("..."))
 	assert.Equal(t, "E", tree.decode("..-"))
 	assert.Equal(t, "", tree.decode("..--"))
+}
+
+func TestEncodeShouldConvertLetterToEquivalentMorseCode(t *testing.T) {
+	preorder := [][]string{{".", "A"}, {".", "B"}, {".", "D"}, {"-", "E"}, {"-", "C"}}
+	inorder := [][]string{{".", "D"}, {".", "B"}, {".", "E"}, {".", "A"}, {".", "C"}}
+	tree, _ := make(MorseCodes{preorder, inorder})
+
+	assert.Equal(t, ".", tree.encode("A"))
+	assert.Equal(t, "..", tree.encode("B"))
+	assert.Equal(t, "..-", tree.encode("E"))
+	assert.Equal(t, "", tree.encode("$$$"))
 }

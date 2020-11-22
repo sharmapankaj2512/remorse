@@ -7,7 +7,7 @@ import (
 
 type MorseTree struct {
 	Root *MorseTreeNode
-	nodes map[string]MorseTreeNode
+	nodes map[string]*MorseTreeNode
 }
 
 type MorseTreeNode struct {
@@ -46,7 +46,7 @@ func makeKey(mapping []string) string {
 }
 
 func makeTree(positions map[string]int, preorder [][]string) *MorseTree {
-	nodes := map[string]MorseTreeNode{}
+	nodes := map[string]*MorseTreeNode{}
 	var preorderIdx = 0	
 	var helper func(parent *MorseTreeNode, start int, end int) *MorseTreeNode
 	helper = func(parent *MorseTreeNode, start int, end int) *MorseTreeNode {
@@ -56,7 +56,7 @@ func makeTree(positions map[string]int, preorder [][]string) *MorseTree {
 		code, letter := preorder[preorderIdx][0], preorder[preorderIdx][1]
 		inorderIdx := positions[makeKey(preorder[preorderIdx])]
 		node := MorseTreeNode{Code: code, Letter: letter, Parent: parent}
-		nodes[letter] = node
+		nodes[letter] = &node
 		preorderIdx += 1
 		if start != end {			
 			node.Left = helper(&node, start, inorderIdx - 1)
@@ -85,4 +85,15 @@ func (tree *MorseTree) decode(code string) string {
 		return ""
 	}		
 	return helper(tree.Root, 0)
+}
+
+func (tree *MorseTree) encode(letter string) string {
+	var helper func (node *MorseTreeNode, code string) string
+	helper = func (node *MorseTreeNode, code string) string {
+		if node == nil {
+			return code
+		}
+		return helper(node.Parent, node.Code + code)
+	}
+	return helper(tree.nodes[letter], "")	
 }
