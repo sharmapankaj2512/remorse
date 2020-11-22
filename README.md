@@ -3,5 +3,5 @@ Usage:
   remorse encode <text>   
 
 Examples:  
-`remorse decode '$... $--.'`  
+`remorse decode '... --.'`  
 `remorse encode D`

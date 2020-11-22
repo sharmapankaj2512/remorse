@@ -17,11 +17,13 @@ Options:
   --version     Show version.`
 
 func main() {
+	const start = "$"
 	codes := makeMorseCodes("morse_code.toml")
 	morseTree, _ := morse.Make(morse.MorseCodes{codes.Preorder, codes.Inorder})		
 	arguments, _ := docopt.ParseArgs(usage, nil, "Remorse 1.0")
 	if arguments["decode"] == true {						
-		fmt.Println(morseTree.Decode(arguments["<morse_code>"].(string)))
+		code := arguments["<morse_code>"].(string)
+		fmt.Println(morseTree.Decode(start, code))
 	}
 	if arguments["encode"] == true {				
 		fmt.Println(morseTree.Encode(arguments["<text>"].(string)))

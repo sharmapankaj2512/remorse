@@ -67,10 +67,10 @@ func makeTree(positions map[string]int, preorder [][]string) *MorseTree {
 	return &MorseTree{helper(nil, 0, len(preorder)-1), nodes}
 }
 
-func (tree *MorseTree) Decode(codes string) string {
+func (tree *MorseTree) Decode(start string, codes string) string {
 	letters := ""
 	for _, code := range strings.Fields(codes) {		
-		letters += tree.decode(code)
+		letters += tree.decode(start + code)
 	}
 	return letters
 }
