@@ -8,7 +8,7 @@ import (
 func TestMakeShouldReturnError_WhenPreoderIsEmpty(t *testing.T) {
 	preorder := [][]string{}
 	inorder := [][]string{{".", "B"}, {".", "A"}}
-	tree, err := make(MorseCodes{preorder, inorder})		
+	tree, err := Make(MorseCodes{preorder, inorder})		
 	
 	assert.Nil(t, tree)
 	assert.NotNil(t, err)
@@ -17,7 +17,7 @@ func TestMakeShouldReturnError_WhenPreoderIsEmpty(t *testing.T) {
 func TestMakeShouldReturnError_WhenInorderIsEmpty(t *testing.T) {
 	preorder := [][]string{{".", "A"}, {".", "B"}}
 	inorder := [][]string{}
-	tree, err := make(MorseCodes{preorder, inorder})		
+	tree, err := Make(MorseCodes{preorder, inorder})		
 	
 	assert.Nil(t, tree)
 	assert.NotNil(t, err)
@@ -26,7 +26,7 @@ func TestMakeShouldReturnError_WhenInorderIsEmpty(t *testing.T) {
 func TestMakeShouldReturnError_WhenPreorderAndInorderHaveDifferentLenghts(t *testing.T) {
 	preorder := [][]string{{".", "A"}, {".", "B"}}
 	inorder := [][]string{{".", "A"}}
-	root, err := make(MorseCodes{preorder, inorder})		
+	root, err := Make(MorseCodes{preorder, inorder})		
 	
 	assert.Nil(t, root)
 	assert.NotNil(t, err)
@@ -35,7 +35,7 @@ func TestMakeShouldReturnError_WhenPreorderAndInorderHaveDifferentLenghts(t *tes
 func TestMakeShouldReturnRootWithLeftSubtree(t *testing.T) {
 	preorder := [][]string{{".", "A"}, {".", "B"}}
 	inorder := [][]string{{".", "B"}, {".", "A"}}
-	tree, _ := make(MorseCodes{preorder, inorder})
+	tree, _ := Make(MorseCodes{preorder, inorder})
 	root := tree.Root
 	left := root.Left
 	right := root.Right
@@ -53,7 +53,7 @@ func TestMakeShouldReturnRootWithLeftSubtree(t *testing.T) {
 func TestMakeShouldReturnRootWithLeftAndRightSubtrees(t *testing.T) {
 	preorder := [][]string{{".", "A"}, {".", "B"}, {".", "D"}, {".", "E"}, {".", "C"}}
 	inorder := [][]string{{".", "D"}, {".", "B"}, {".", "E"}, {".", "A"}, {".", "C"}}
-	tree, _ := make(MorseCodes{preorder, inorder})		
+	tree, _ := Make(MorseCodes{preorder, inorder})		
 	root := tree.Root
 	left := root.Left
 	right := root.Right
@@ -68,33 +68,33 @@ func TestMakeShouldReturnRootWithLeftAndRightSubtrees(t *testing.T) {
 func TestDecodeShouldConvertMorseCodeToLetter(t *testing.T) {
 	preorder := [][]string{{".", "A"}, {".", "B"}, {".", "D"}, {"-", "E"}, {"-", "C"}}
 	inorder := [][]string{{".", "D"}, {".", "B"}, {".", "E"}, {".", "A"}, {".", "C"}}
-	tree, _ := make(MorseCodes{preorder, inorder})
+	tree, _ := Make(MorseCodes{preorder, inorder})
 	
-	assert.Equal(t, "A", tree.decode("."))
-	assert.Equal(t, "B", tree.decode(".."))
-	assert.Equal(t, "C", tree.decode(".-"))
-	assert.Equal(t, "D", tree.decode("..."))
-	assert.Equal(t, "E", tree.decode("..-"))
-	assert.Equal(t, "", tree.decode("..--"))
+	assert.Equal(t, "A", tree.Decode("."))
+	assert.Equal(t, "B", tree.Decode(".."))
+	assert.Equal(t, "C", tree.Decode(".-"))
+	assert.Equal(t, "D", tree.Decode("..."))
+	assert.Equal(t, "E", tree.Decode("..-"))
+	assert.Equal(t, "", tree.Decode("..--"))
 }
 
 func TestDecodeShouldConvertSpaceSeparatedMorseCodesToLetters(t *testing.T) {
 	preorder := [][]string{{".", "A"}, {".", "B"}, {".", "D"}, {"-", "E"}, {"-", "C"}}
 	inorder := [][]string{{".", "D"}, {".", "B"}, {".", "E"}, {".", "A"}, {".", "C"}}
-	tree, _ := make(MorseCodes{preorder, inorder})
+	tree, _ := Make(MorseCodes{preorder, inorder})
 	
-	assert.Equal(t, "AB", tree.decode(". .."))
-	assert.Equal(t, "B", tree.decode(".."))	
-	assert.Equal(t, "DE", tree.decode("... ..-"))	
+	assert.Equal(t, "AB", tree.Decode(". .."))
+	assert.Equal(t, "B", tree.Decode(".."))	
+	assert.Equal(t, "DE", tree.Decode("... ..-"))	
 }
 
 func TestEncodeShouldConvertLetterToEquivalentMorseCode(t *testing.T) {
 	preorder := [][]string{{".", "A"}, {".", "B"}, {".", "D"}, {"-", "E"}, {"-", "C"}}
 	inorder := [][]string{{".", "D"}, {".", "B"}, {".", "E"}, {".", "A"}, {".", "C"}}
-	tree, _ := make(MorseCodes{preorder, inorder})
+	tree, _ := Make(MorseCodes{preorder, inorder})
 
-	assert.Equal(t, ".", tree.encode("A"))
-	assert.Equal(t, "..", tree.encode("B"))
-	assert.Equal(t, "..-", tree.encode("E"))
-	assert.Equal(t, "", tree.encode("$$$"))
+	assert.Equal(t, ".", tree.Encode("A"))
+	assert.Equal(t, "..", tree.Encode("B"))
+	assert.Equal(t, "..-", tree.Encode("E"))
+	assert.Equal(t, "", tree.Encode("$$$"))
 }

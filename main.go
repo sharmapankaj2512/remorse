@@ -2,15 +2,30 @@ package main
 
 import (
 	"fmt"
+	"github.com/docopt/docopt-go"
 	"github.com/naoina/toml"
-	"github.com/sharmapankaj2512/remorse/morse"
-	"os"
+	morse "github.com/sharmapankaj2512/remorse/morse"
+	"os"	
 )
+
+var usage = `Remorse - morse code translator.
+Usage:
+  remorse decode <morse_code>
+  remorse encode <text>  
+Options:
+  -h --help     Show this screen.
+  --version     Show version.`
 
 func main() {
 	codes := makeMorseCodes("morse_code.toml")
-	fmt.Println(codes.Preorder)
-	fmt.Println(codes.Inorder)
+	morseTree, _ := morse.Make(morse.MorseCodes{codes.Preorder, codes.Inorder})		
+	arguments, _ := docopt.ParseArgs(usage, nil, "Remorse 1.0")
+	if arguments["decode"] == true {				
+		fmt.Println(morseTree.Decode(arguments["<morse_code>"].(string)))
+	}
+	if arguments["encode"] == true {				
+		fmt.Println(morseTree.Encode(arguments["<text>"].(string)))
+	}
 }
 
 func makeMorseCodes(tomlFile string) morse.MorseCodes {

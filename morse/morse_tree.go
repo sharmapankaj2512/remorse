@@ -18,7 +18,7 @@ type MorseTreeNode struct {
 	Letter string
 }
 
-func make(codes MorseCodes) (*MorseTree, error) {
+func Make(codes MorseCodes) (*MorseTree, error) {
 	if len(codes.Preorder) == 0 {
 		return nil, errors.New("Preorder is mandatory")
 	}
@@ -67,15 +67,15 @@ func makeTree(positions map[string]int, preorder [][]string) *MorseTree {
 	return &MorseTree{helper(nil, 0, len(preorder) - 1), nodes}
 }
 
-func (tree *MorseTree) decode(codes string) string {
+func (tree *MorseTree) Decode(codes string) string {
 	letters := ""
 	for _, code := range strings.Fields(codes) {
-		letters += tree.decodeCode(code)
+		letters += tree.decode(code)
 	}
 	return letters
 }
 
-func (tree *MorseTree) decodeCode(code string) string {
+func (tree *MorseTree) decode(code string) string {
 	var helper func (node *MorseTreeNode, code string, codeIdx int) string
 	helper = func (node *MorseTreeNode, code string, codeIdx int) string {
 		if codeIdx == len(code) - 1 {
@@ -95,7 +95,7 @@ func (tree *MorseTree) decodeCode(code string) string {
 	return helper(tree.Root, code, 0)
 }
 
-func (tree *MorseTree) encode(letter string) string {
+func (tree *MorseTree) Encode(letter string) string {
 	var helper func (node *MorseTreeNode, code string) string
 	helper = func (node *MorseTreeNode, code string) string {
 		if node == nil {
