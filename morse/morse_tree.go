@@ -67,9 +67,17 @@ func makeTree(positions map[string]int, preorder [][]string) *MorseTree {
 	return &MorseTree{helper(nil, 0, len(preorder) - 1), nodes}
 }
 
-func (tree *MorseTree) decode(code string) string {	
-	var helper func (node *MorseTreeNode, codeIdx int) string
-	helper = func (node *MorseTreeNode, codeIdx int) string {
+func (tree *MorseTree) decode(codes string) string {
+	letters := ""
+	for _, code := range strings.Fields(codes) {
+		letters += tree.decodeCode(code)
+	}
+	return letters
+}
+
+func (tree *MorseTree) decodeCode(code string) string {
+	var helper func (node *MorseTreeNode, code string, codeIdx int) string
+	helper = func (node *MorseTreeNode, code string, codeIdx int) string {
 		if codeIdx == len(code) - 1 {
 			return node.Letter
 		}
@@ -77,14 +85,14 @@ func (tree *MorseTree) decode(code string) string {
 			return ""
 		}		
 		if node.Left != nil && string(code[codeIdx + 1]) == node.Left.Code {
-			return helper(node.Left, codeIdx + 1)
+			return helper(node.Left, code, codeIdx + 1)
 		} 
 		if node.Right != nil && string(code[codeIdx + 1]) == node.Right.Code { 
-			return helper(node.Right, codeIdx + 1)
+			return helper(node.Right, code, codeIdx + 1)
 		}
 		return ""
-	}		
-	return helper(tree.Root, 0)
+	}
+	return helper(tree.Root, code, 0)
 }
 
 func (tree *MorseTree) encode(letter string) string {
