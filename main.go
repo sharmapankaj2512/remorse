@@ -20,7 +20,7 @@ func main() {
 	codes := makeMorseCodes("morse_code.toml")
 	morseTree, _ := morse.Make(morse.MorseCodes{codes.Preorder, codes.Inorder})		
 	arguments, _ := docopt.ParseArgs(usage, nil, "Remorse 1.0")
-	if arguments["decode"] == true {				
+	if arguments["decode"] == true {						
 		fmt.Println(morseTree.Decode(arguments["<morse_code>"].(string)))
 	}
 	if arguments["encode"] == true {				
