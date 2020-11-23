@@ -95,13 +95,24 @@ func (tree *MorseTree) decode(code string) string {
 	return helper(tree.Root, code, 0)
 }
 
-func (tree *MorseTree) Encode(letter string) string {
+func (tree *MorseTree) Encode(start string, letters string) string {	
+	code := []string{}
+	for _, letter := range letters {		
+		code = append(code, tree.encode(start, string(letter)))
+	}
+	return strings.Trim(strings.Join(code, " "), " ")
+}
+
+func (tree *MorseTree) encode(start string, letter string) string {
 	var helper func(node *MorseTreeNode, code string) string
 	helper = func(node *MorseTreeNode, code string) string {
 		if node == nil {
 			return code
 		}
-		return helper(node.Parent, node.Code+code)
+		if node.Code == start {
+			return helper(node.Parent, "" + code)
+		}
+		return helper(node.Parent, node.Code + code)
 	}
 	return helper(tree.nodes[letter], "")
 }

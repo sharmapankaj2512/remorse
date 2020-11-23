@@ -26,7 +26,7 @@ func main() {
 		fmt.Println(morseTree.Decode(start, code))
 	}
 	if arguments["encode"] == true {				
-		fmt.Println(morseTree.Encode(arguments["<text>"].(string)))
+		fmt.Println(morseTree.Encode(start, arguments["<text>"].(string)))
 	}
 }
 

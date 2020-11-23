@@ -93,8 +93,18 @@ func TestEncodeShouldConvertLetterToEquivalentMorseCode(t *testing.T) {
 	inorder := [][]string{{".", "D"}, {".", "B"}, {".", "E"}, {".", "A"}, {".", "C"}}
 	tree, _ := Make(MorseCodes{preorder, inorder})
 
-	assert.Equal(t, ".", tree.Encode("A"))
-	assert.Equal(t, "..", tree.Encode("B"))
-	assert.Equal(t, "..-", tree.Encode("E"))
-	assert.Equal(t, "", tree.Encode("$$$"))
+	assert.Equal(t, ".", tree.Encode("", "A"))
+	assert.Equal(t, "..", tree.Encode("", "B"))
+	assert.Equal(t, "..-", tree.Encode("", "E"))
+	assert.Equal(t, "", tree.Encode("", "$$$"))
+}
+
+func TestEncodeShouldConvertLettersToEquivalentMorseCodes(t *testing.T) {
+	preorder := [][]string{{".", "A"}, {".", "B"}, {".", "D"}, {"-", "E"}, {"-", "C"}}
+	inorder := [][]string{{".", "D"}, {".", "B"}, {".", "E"}, {".", "A"}, {".", "C"}}
+	tree, _ := Make(MorseCodes{preorder, inorder})
+
+	assert.Equal(t, ". .", tree.Encode("", "AA"))
+	assert.Equal(t, ".. .", tree.Encode("", "BA"))
+	assert.Equal(t, "..- ..", tree.Encode("", "EB"))	
 }
