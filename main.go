@@ -1,17 +1,18 @@
 package main
 
 import (
+	"os"	
 	"fmt"
+	"io/ioutil"
 	"github.com/docopt/docopt-go"
 	"github.com/naoina/toml"
-	morse "github.com/sharmapankaj2512/remorse/morse"
-	"os"	
+	"github.com/sharmapankaj2512/remorse/morse"	
 )
 
 var usage = `Remorse - morse code translator.
 Usage:
-  remorse decode <morse_code>
-  remorse encode <text>  
+  remorse decode --file <file>
+  remorse encode --file <file>
 Options:
   -h --help     Show this screen.
   --version     Show version.`
@@ -19,14 +20,35 @@ Options:
 func main() {
 	const start = "$"
 	codes := makeMorseCodes("morse_code.toml")
-	morseTree, _ := morse.Make(morse.MorseCodes{codes.Preorder, codes.Inorder})		
-	arguments, _ := docopt.ParseArgs(usage, nil, "Remorse 1.0")
-	if arguments["decode"] == true {						
-		code := arguments["<morse_code>"].(string)
-		fmt.Println(morseTree.Decode(start, code))
+	morseTree, _ := morse.Make(morse.MorseCodes{codes.Preorder, codes.Inorder})
+	arguments, _ := docopt.ParseArgs(usage, nil, "Remorse 1.0")		
+	if arguments["decode"].(bool) {
+		decode(morseTree, start, arguments)		
 	}
-	if arguments["encode"] == true {				
-		fmt.Println(morseTree.Encode(start, arguments["<text>"].(string)))
+	if arguments["encode"].(bool) {
+		encode(morseTree, start, arguments)		
+	}
+}
+
+func decode(morseTree *morse.MorseTree, start string, args map[string]interface{}) {
+	if args["--file"].(bool) {
+		file := args["<file>"].(string)
+		data, err := ioutil.ReadFile(file)
+		if err != nil {
+			panic("Cannot read file")
+		}
+		fmt.Println(morseTree.Decode(start, string(data)))
+	}
+}
+
+func encode(morseTree *morse.MorseTree, start string, args map[string]interface{}) {
+	if args["--file"].(bool) {
+		file := args["<file>"].(string)
+		data, err := ioutil.ReadFile(file)
+		if err != nil {
+			panic("Cannot read file")
+		}
+		fmt.Println(morseTree.Encode(start, string(data)))
 	}
 }
 
