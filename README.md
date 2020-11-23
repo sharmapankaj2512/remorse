@@ -1,7 +1,9 @@
-Usage:  
-  remorse decode <morse_code>  
-  remorse encode <text>   
+## Remorse - morse code translator
 
-Examples:  
-`remorse decode '... --.'`  
-`remorse encode D`
+#### Usage:  
+  `remorse decode --file <file>`  
+  `remorse encode --file <file>`  
+
+#### Examples:  
+`remorse encode --file sample-text.txt`  
+`remorse decode --file sample-code.txt`
