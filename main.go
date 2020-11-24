@@ -9,6 +9,7 @@ import (
 	"github.com/sharmapankaj2512/remorse/morse"	
 )
 
+const start = "$"
 var usage = `Remorse - morse code translator.
 Usage:
   remorse decode --file <file>
@@ -17,20 +18,19 @@ Options:
   -h --help     Show this screen.
   --version     Show version.`
 
-func main() {
-	const start = "$"
+func main() {	
 	codes := makeMorseCodes("morse_code.toml")
 	morseTree, _ := morse.Make(morse.MorseCodes{codes.Preorder, codes.Inorder})
 	arguments, _ := docopt.ParseArgs(usage, nil, "Remorse 1.0")		
 	if arguments["decode"].(bool) {
-		decode(morseTree, start, arguments)		
+		decode(morseTree, arguments)		
 	}
 	if arguments["encode"].(bool) {
-		encode(morseTree, start, arguments)		
+		encode(morseTree, arguments)		
 	}
 }
 
-func decode(morseTree *morse.MorseTree, start string, args map[string]interface{}) {
+func decode(morseTree *morse.MorseTree, args map[string]interface{}) {
 	if args["--file"].(bool) {
 		file := args["<file>"].(string)
 		data, err := ioutil.ReadFile(file)
@@ -41,7 +41,7 @@ func decode(morseTree *morse.MorseTree, start string, args map[string]interface{
 	}
 }
 
-func encode(morseTree *morse.MorseTree, start string, args map[string]interface{}) {
+func encode(morseTree *morse.MorseTree, args map[string]interface{}) {
 	if args["--file"].(bool) {
 		file := args["<file>"].(string)
 		data, err := ioutil.ReadFile(file)
